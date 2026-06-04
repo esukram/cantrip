@@ -96,12 +96,17 @@ verbatim under the heading — don't invent a section for it.
 
 ### 3. Resolve and classify each URL
 
-- **`share.google/...` links** are redirects the user does NOT want kept. Resolve
-  each to its real target before doing anything else:
+- **`share.google/...` links** are redirects the user would rather see resolved.
+  Resolve each to its real target before doing anything else:
   ```bash
   python scripts/resolve_share_url.py "https://share.google/63KCWNHaYSbAF4hgJ"
   ```
-  Use the resolved URL everywhere in the output. Never keep a `share.google` link.
+  Use the resolved URL everywhere in the output. **If resolution fails** (e.g.
+  the share link returns HTTP 429 / is rate-limited), the script prints a
+  `warning:` to stderr and falls back to printing the **original**
+  `share.google` URL — keep that original link in the output rather than
+  dropping it or replacing it with prose. A real link the user can still click
+  is always better than no link.
 - A URL that already points somewhere real (e.g. a `youtube.com`/`youtu.be` link)
   is used as-is.
 - Classify the resolved URL as **YouTube** (youtube.com / youtu.be) or **article**
