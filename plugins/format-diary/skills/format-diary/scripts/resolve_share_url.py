@@ -50,8 +50,10 @@ def resolve_share_url(
     Follows HTTP redirects and, if needed, a meta-refresh or JS location hop
     found in the landing page. Falls back to the final HTTP URL.
 
-    On a network error the request is retried up to ``retries`` extra times
-    with a linear backoff. The last error is re-raised if all attempts fail.
+    On a network error (including rate limiting / HTTP 429) the request is
+    retried up to ``retries`` extra times with a linear backoff. The last error
+    is re-raised if all attempts fail; callers should keep the original URL in
+    that case rather than dropping it.
     """
     last_error: Exception | None = None
     for attempt in range(retries + 1):
@@ -104,6 +106,14 @@ def main(argv: list[str]) -> int:
         metavar="N",
         help=f"extra attempts on network failure (default: {DEFAULT_RETRIES})",
     )
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help=(
+            "fail (exit 1) when the URL can't be resolved instead of falling "
+            "back to printing the original URL"
+        ),
+    )
     args = parser.parse_args(argv[1:])
 
     if args.timeout <= 0:
@@ -114,8 +124,13 @@ def main(argv: list[str]) -> int:
     try:
         print(resolve_share_url(args.url, timeout=args.timeout, retries=args.retries))
     except Exception as exc:  # noqa: BLE001 - surface any failure to the caller
-        print(f"error: {exc}", file=sys.stderr)
-        return 1
+        if args.strict:
+            print(f"error: {exc}", file=sys.stderr)
+            return 1
+        # Couldn't resolve (e.g. HTTP 429 rate limit): keep the original URL so
+        # the link is never lost. Note the failure on stderr for visibility.
+        print(f"warning: could not resolve, keeping original URL: {exc}", file=sys.stderr)
+        print(args.url)
     return 0
 
 
