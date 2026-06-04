@@ -21,6 +21,12 @@
       "source": "./plugins/council",
       "description": "Get an independent second opinion before acting on a plan, decision, code review, or audit. Sends the artifact to codex (an external model, read-only) plus a separate independent Claude critique, reconciles both against the actual code, and reports a verdict — consensus, conflicts, and dismissed false positives. Requires the codex CLI.",
       "version": "1.0.0"
+    },
+    {
+      "name": "pr-handle",
+      "source": "./plugins/pr-handle",
+      "description": "Handle a GitHub PR end-to-end in an isolated worktree — verify CI is green and review threads are resolved, run the test suite, merge, update the base branch, and clean up. Aborts at any failing gate and never merges unless every check passes.",
+      "version": "1.0.0"
     }
   ]
 }
