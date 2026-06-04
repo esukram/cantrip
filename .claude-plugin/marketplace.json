@@ -23,9 +23,9 @@
       "version": "1.0.0"
     },
     {
-      "name": "pr-handle",
-      "source": "./plugins/pr-handle",
-      "description": "Handle a GitHub PR end-to-end in an isolated worktree — verify CI is green and review threads are resolved, run the test suite, merge, update the base branch, and clean up. Aborts at any failing gate and never merges unless every check passes.",
+      "name": "land-pr",
+      "source": "./plugins/land-pr",
+      "description": "Land a GitHub PR end-to-end in an isolated worktree — verify CI is green and review threads are resolved, run the test suite, merge, update the base branch, and clean up. Aborts at any failing gate and never merges unless every check passes.",
       "version": "1.0.0"
     }
   ]

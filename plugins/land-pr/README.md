@@ -1,4 +1,4 @@
-# pr-handle
+# land-pr
 
 A Claude Code skill that takes a pull request from inspection all the way through
 merge and cleanup — running every stage in order and **aborting the moment a gate
@@ -29,10 +29,10 @@ merge commit SHA, base-branch update, and cleanup status.
 ## Usage
 
 This skill is **manually invoked** (`disable-model-invocation: true`) and takes the
-PR number as its argument. Once installed (`/plugin install pr-handle@skill-foundry`):
+PR number as its argument. Once installed (`/plugin install land-pr@skill-foundry`):
 
-- `/pr-handle 42`
-- "Handle PR #42 end-to-end."
+- `/land-pr 42`
+- "Land PR #42 end-to-end."
 - "Validate and merge pull request 42."
 
 ## Requirements

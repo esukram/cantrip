@@ -1,12 +1,12 @@
 ---
-name: pr-handle
-description: Handle a GitHub PR end-to-end in an isolated worktree — verify CI is green and review threads are resolved, run the test suite, merge, update the base branch, and clean up. Use when the user asks to handle, validate-and-merge, or fully process a pull request by number.
+name: land-pr
+description: Land a GitHub PR end-to-end in an isolated worktree — verify CI is green and review threads are resolved, run the test suite, merge, update the base branch, and clean up. Use when the user asks to land, validate-and-merge, or fully process a pull request by number.
 disable-model-invocation: true
 argument-hint: "<PR-number>"
 allowed-tools: Bash(gh:*), Bash(git:*), Bash(pnpm:*), Bash(npm:*), Bash(yarn:*), Bash(cat:*), Bash(ls:*), Read
 ---
 
-# Handle PR end-to-end
+# Land PR end-to-end
 
 Process pull request **#$ARGUMENTS** from inspection through merge and cleanup.
 Run the stages in order. **Abort and report** at any stage that fails — never
