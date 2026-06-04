@@ -1,19 +1,19 @@
-# skill-foundry
+# cantrip
 
 A personal [Claude Code](https://code.claude.com) plugin **marketplace** — a small
-foundry of practical, well-tested skills.
+collection of practical, well-tested skills you summon at will.
 
 ## Install
 
 Add the marketplace, then install the plugin you want:
 
 ```
-/plugin marketplace add esukram/skill-foundry
-/plugin install format-diary@skill-foundry
+/plugin marketplace add esukram/cantrip
+/plugin install format-diary@cantrip
 ```
 
-(Equivalent non-interactive CLI: `claude plugin marketplace add esukram/skill-foundry`
-then `claude plugin install format-diary@skill-foundry`.)
+(Equivalent non-interactive CLI: `claude plugin marketplace add esukram/cantrip`
+then `claude plugin install format-diary@cantrip`.)
 
 ## Plugins
 
@@ -26,7 +26,7 @@ then `claude plugin install format-diary@skill-foundry`.)
 ## Repository layout
 
 ```
-skill-foundry/
+cantrip/
 ├── .claude-plugin/
 │   └── marketplace.json        # marketplace manifest
 └── plugins/

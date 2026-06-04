@@ -1,11 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
-  "name": "skill-foundry",
+  "name": "cantrip",
   "owner": {
     "name": "Markus Heimbach",
     "email": "markus@heimbach.at"
   },
-  "description": "A personal foundry of practical Claude Code skills.",
+  "description": "A personal collection of practical Claude Code skills — small capabilities you summon at will.",
   "metadata": {
     "pluginRoot": "./plugins"
   },

@@ -29,7 +29,7 @@ merge commit SHA, base-branch update, and cleanup status.
 ## Usage
 
 This skill is **manually invoked** (`disable-model-invocation: true`) and takes the
-PR number as its argument. Once installed (`/plugin install land-pr@skill-foundry`):
+PR number as its argument. Once installed (`/plugin install land-pr@cantrip`):
 
 - `/land-pr 42`
 - "Land PR #42 end-to-end."

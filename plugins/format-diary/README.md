@@ -37,7 +37,7 @@ changes how startups are structured…
 
 ## Usage
 
-Once installed (`/plugin install format-diary@skill-foundry`), just ask:
+Once installed (`/plugin install format-diary@cantrip`), just ask:
 
 - "Format my Obsidian diary note `2026-06-04.md`."
 - "Turn `2026-06-03.md` into a diary entry."

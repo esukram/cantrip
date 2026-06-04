@@ -30,7 +30,7 @@ single-voice (critic-only) review rather than fabricating a second opinion.
 
 ## Usage
 
-Once installed (`/plugin install council@skill-foundry`), just ask — for example:
+Once installed (`/plugin install council@cantrip`), just ask — for example:
 
 - "Get a second opinion on this migration plan before I commit to it."
 - "Cross-check these security-audit findings against the real code — flag false positives."
