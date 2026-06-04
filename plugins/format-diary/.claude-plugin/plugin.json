@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "format-diary",
+  "displayName": "Format Diary",
+  "description": "Turn an Obsidian daily note of raw saved links into a formatted diary entry, resolving share.google redirects, fetching article text and YouTube transcripts, and writing summaries, hashtags, and collapsed callouts.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Markus Heimbach",
+    "email": "markus@heimbach.at"
+  },
+  "homepage": "https://github.com/esukram/skill-foundry/tree/main/plugins/format-diary",
+  "repository": "https://github.com/esukram/skill-foundry",
+  "license": "MIT",
+  "keywords": [
+    "obsidian",
+    "diary",
+    "daily-notes",
+    "links",
+    "youtube",
+    "transcript",
+    "summary"
+  ]
+}

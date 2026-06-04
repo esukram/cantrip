@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "skill-foundry",
+  "owner": {
+    "name": "Markus Heimbach",
+    "email": "markus@heimbach.at"
+  },
+  "description": "A personal foundry of practical Claude Code skills.",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "format-diary",
+      "source": "./plugins/format-diary",
+      "description": "Turn an Obsidian daily note of raw saved links into a formatted diary entry: speaking titles, resolved real URLs, summaries, transcript summaries for YouTube, hashtags, and collapsed callouts holding the full page text or transcript.",
+      "version": "1.0.0"
+    }
+  ]
+}
