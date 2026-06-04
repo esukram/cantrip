@@ -15,6 +15,12 @@
       "source": "./plugins/format-diary",
       "description": "Turn an Obsidian daily note of raw saved links into a formatted diary entry: speaking titles, resolved real URLs, summaries, transcript summaries for YouTube, hashtags, and collapsed callouts holding the full page text or transcript.",
       "version": "1.0.0"
+    },
+    {
+      "name": "council",
+      "source": "./plugins/council",
+      "description": "Get an independent second opinion before acting on a plan, decision, code review, or audit. Sends the artifact to codex (an external model, read-only) plus a separate independent Claude critique, reconciles both against the actual code, and reports a verdict — consensus, conflicts, and dismissed false positives. Requires the codex CLI.",
+      "version": "1.0.0"
     }
   ]
 }
