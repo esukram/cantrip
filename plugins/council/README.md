@@ -17,6 +17,22 @@ It then triages every point against the actual code into **consensus / conflict 
 single-source / dismissed** (false positives refuted with a code reference) and reports
 a reconciled verdict. It **recommends — it does not auto-apply changes**.
 
+## Two modes
+
+The plugin ships two skills — pick by stakes:
+
+- **`council:council`** (the thorough default) — runs a **multi-pass loop**: after
+  reconciling once, it hands its *own draft verdict* back to the voices to attack and
+  loops until a pass surfaces nothing new (always ≥2 passes, capped at `MAX_PASSES`).
+  When the converged loop leaves a conflict that only the human can settle — intent,
+  risk, scope, priority — it pulls you in to **arbitrate** one question at a time
+  (interactive contexts only; in headless/auto runs it lists them under "Human
+  decision needed" instead). The human's call is binding and recorded.
+- **`council:fast`** — a quick, fully autonomous **single pass**: gather both voices,
+  reconcile once, report conflicts as prose for you to settle. No loop, no questions.
+  Reach for it on a small or low-stakes decision, a fast gut-check, or any
+  headless/unattended run.
+
 ## Prerequisites
 
 This skill drives the [Codex CLI](https://github.com/openai/codex) over MCP. You need:
@@ -49,9 +65,11 @@ that already exists or a decision about to be made.
 |------|--------------|
 | 0 | Confirm codex is reachable; note the repo root. |
 | 1 | Frame one self-contained briefing (works standalone — neither reviewer sees the chat). |
-| 2 | Convene both voices in parallel: codex (read-only) **and** an independent critic subagent. |
-| 3 | Triage every point against the actual code; verify each kept claim at `file:line`. |
-| 4 | Report a reconciled verdict (consensus / conflict / single-source / dismissed), then stop. |
+| 2 | Pass 1 — convene both voices in parallel: codex (read-only) **and** an independent critic subagent. |
+| 3 | Triage every point against the actual code into a **draft verdict**; verify each kept claim at `file:line`. |
+| 4 | **Multi-pass loop** (`council:council`) — hand the draft back to the voices to attack; re-reconcile until it converges (≥2 passes, capped at `MAX_PASSES`). `council:fast` stops after the single pass. |
+| 5 | **Arbitrate** (`council:council`, interactive only) — put any surviving judgment-owned conflict to the human, one question at a time; the call is binding and recorded. |
+| 6 | Report a reconciled verdict (consensus / conflict / single-source / dismissed, plus Human-arbitrated / Human decision needed), then stop. |
 
 See [`skills/council/references/codex-prompt-template.md`](skills/council/references/codex-prompt-template.md)
 for the briefing structure.
