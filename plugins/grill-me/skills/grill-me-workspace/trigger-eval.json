@@ -1,0 +1,22 @@
+[
+  {"query": "grill me on this — I'm about to rewrite our auth flow to use refresh-token rotation and I want to be sure I've thought through the edge cases before I touch any code", "should_trigger": true},
+  {"query": "can you interview me about this caching design and then have a second model poke holes in it? I keep flip-flopping on the TTLs and eviction policy", "should_trigger": true},
+  {"query": "before I start building the billing webhook handler, stress-test my plan: ask me the hard questions first, then get codex to tear it apart", "should_trigger": true},
+  {"query": "i wanna build a rate limiter for our api gateway. quiz me on the design first one question at a time and then get an outside opinion before i write anything", "should_trigger": true},
+  {"query": "interview me about whether to use SSE or websockets for the live dashboard, then have another model adversarially review whatever approach we settle on", "should_trigger": true},
+  {"query": "play devil's advocate on my plan to shard the events table — drill into my assumptions, then bring in codex to attack it before I commit", "should_trigger": true},
+  {"query": "I'm about to refactor the whole notification system. really pressure-test my thinking and have a second AI critique the plan before I build it", "should_trigger": true},
+  {"query": "help me harden this RFC before I send it to the team — grill me on the gaps then get an adversarial read from codex", "should_trigger": true},
+  {"query": "lock down a plan with me for the OAuth integration. interrogate me until we've nailed the decisions, then second-model review it", "should_trigger": true},
+  {"query": "I keep building things and regretting the design later. for this new search-indexing pipeline, can you question me hard up front and then have codex sanity-check the locked plan?", "should_trigger": true},
+  {"query": "I already wrote out the migration plan, it's in MIGRATION.md. get codex to sanity-check it and flag anything wrong or risky", "should_trigger": false},
+  {"query": "cross-check these security-audit findings I produced against the actual code — are any of them false positives?", "should_trigger": false},
+  {"query": "I just finished reviewing PR #42 and wrote up my comments. get a second opinion on whether my findings actually hold before I post them", "should_trigger": false},
+  {"query": "review my changes on this branch for bugs and anything sloppy before I open a PR", "should_trigger": false},
+  {"query": "here's the spec — just build me a CLI flag parser that handles --verbose, --output and --dry-run, no need to overthink it", "should_trigger": false},
+  {"query": "interview me for a blog post about my career as a backend engineer — ask me about projects I'm proud of", "should_trigger": false},
+  {"query": "land PR #88 for me — check CI is green, run the test suite, merge it and clean up the branch", "should_trigger": false},
+  {"query": "here's my finalized architecture doc. tell me whether switching to event sourcing is the right call — is it sound?", "should_trigger": false},
+  {"query": "research the tradeoffs between Temporal and a homegrown job queue for our use case and write me up a report with sources", "should_trigger": false},
+  {"query": "quiz me on system design interview questions, I've got an onsite at a big tech company next week", "should_trigger": false}
+]
