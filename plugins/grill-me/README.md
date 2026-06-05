@@ -6,9 +6,11 @@ into it** — before a line of code is written.
 Two acts:
 
 1. **Grill.** Claude interviews you about what you're about to build — **one question
-   at a time**, each with a recommended answer, reading the codebase to answer its own
-   factual questions rather than spending your attention. It chases every branch of
-   the decision tree until the plan is concrete and shared, then locks it to `PLAN.md`.
+   at a time**, each with a recommended answer. It's a *pure human interview*: Claude
+   asks, you answer — it does **not** go read the codebase to answer its own questions
+   (that grounding is Act 2's job). It chases every branch of the decision tree until
+   the plan is concrete and shared, then locks it to `PLAN.md` — recording any
+   code-level assumptions for codex to verify.
 2. **Review.** That plan goes to [codex](https://github.com/openai/codex) — a
    *different* model, reading the repo fresh in a read-only sandbox **over MCP** — for
    round-by-round adversarial critique. Codex attacks; Claude arbitrates each round
@@ -48,7 +50,7 @@ It can also offer itself when you're about to commit to something high-stakes.
 
 | Step | What happens |
 |------|--------------|
-| Act 1 | Grill you one question at a time (recommended answer each), reading code to self-answer, until the decision tree resolves; lock the plan to `PLAN.md`. |
+| Act 1 | Grill you one question at a time (recommended answer each) — a pure human interview, no codebase digging — until the decision tree resolves; lock the plan to `PLAN.md` with any code assumptions flagged for Act 2. |
 | Act 2 · round 1 | Start a codex session (`mcp__codex__codex`, read-only) with an adversarial-review briefing; capture the `threadId`. |
 | Act 2 · rounds 2..N | Resume the same session (`mcp__codex__codex-reply`) after each revision; codex re-reviews with full context. |
 | Each round | Log codex's critique + Claude's arbitration; parse the terminal `VERDICT:` line; revise or converge. |

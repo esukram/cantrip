@@ -1,16 +1,18 @@
 ---
 name: grill-me
-description: Interview the user relentlessly about something they're about to build, then have codex adversarially review the resulting plan. Act 1 — grill: ask one sharp question at a time (each with a recommended answer), preferring to read the codebase over asking, until the decision tree is resolved and the plan is locked to PLAN.md. Act 2 — review: send that plan to codex (an external model, read-only, over MCP) for round-by-round adversarial critique, with Claude arbitrating revisions, until codex approves, a round cap is hit, or the user signs off. Reach for it when the user is about to commit to something high-stakes and says "grill me", "stress-test this plan", "interview me about this then get a second model on it", "poke holes in this before I build it", or wants a plan hardened by questioning plus an outside model before any code is written. Plans and reviews only — it writes no implementation code until the user signs off.
+description: Interview the user relentlessly about something they're about to build, then have codex adversarially review the resulting plan. Act 1 — grill: ask the user one sharp question at a time (each with a recommended answer), chasing the decision tree until it's resolved and the plan is locked to PLAN.md. This is a pure human interview — Claude asks, the user answers; no codebase digging yet. Act 2 — review: codex (an external model, read-only, over MCP) reads the repo fresh and adversarially critiques the plan round by round, with Claude arbitrating revisions, until codex approves, a round cap is hit, or the user signs off. The codebase grounding lives here, in Act 2, where codex verifies the plan against the real code. Reach for it when the user is about to commit to something high-stakes and says "grill me", "stress-test this plan", "interview me about this then get a second model on it", "poke holes in this before I build it", or wants a plan hardened by questioning plus an outside model before any code is written. Plans and reviews only — it writes no implementation code until the user signs off.
 argument-hint: "[what you're about to build]"
 ---
 
 # Grill Me: interview to a locked plan, then codex tears into it
 
 Two acts. **Act 1** is a relentless interview that turns a vague intention into a
-concrete, locked plan. **Act 2** hands that plan to codex — a *different* model,
-reading the repo fresh in a read-only sandbox — for adversarial review across as
-many rounds as it takes to converge, with you as the final arbiter. The point is
-to find the holes *before* writing code, not after.
+concrete, locked plan — Claude asks the user questions; it is *not* Claude
+answering its own questions from the codebase. That codebase grounding is **Act 2's**
+job: Act 2 hands the plan to codex — a *different* model, reading the repo fresh in a
+read-only sandbox — for adversarial review across as many rounds as it takes to
+converge, with you as the final arbiter. The point is to find the holes *before*
+writing code, not after.
 
 This skill **plans and reviews — it does not implement**. No code is written until
 the user explicitly signs off on the final plan.
@@ -31,21 +33,61 @@ Echo the resolved values before starting Act 2:
 Interview the user about **$ARGUMENTS** (what they're about to build). If invoked
 with no argument, open by asking what they're about to build, then proceed.
 
+Act 1 is a **pure human interview**: Claude asks, the user answers. You are
+extracting the user's intent, priorities, tradeoffs, constraints, and scope — the
+things only they can settle. **Do not read the codebase to answer your own questions
+in Act 1.** Resist the urge to go investigate and self-resolve; if a factual
+assumption matters, capture it in the plan as a stated assumption and let codex
+verify it against the real code in Act 2. Act 1 is questions *to the human*, not
+Claude answering them.
+
 The rules of the grill:
 
-- **One question at a time.** Never batch. Ask, wait for the answer, let it shape
-  the next question. A grill is a sequence, not a form.
-- **Always include a recommended answer.** For every question, say what you'd do
-  and why — give the user something to push against, not a blank prompt.
-- **Read before you ask.** If a question can be answered by reading the codebase
-  (how is X currently done? does this util already exist? what's the test setup?),
-  go find out instead of spending the user's attention on it. Use your read tools
-  freely. Only ask the user what only the user can answer — intent, priorities,
-  tradeoffs, constraints, scope.
+- **One question at a time.** Never batch. Ask via the `AskUserQuestion` tool —
+  exactly one question per call — wait for the answer, let it shape the next. A
+  grill is a sequence, not a form.
+- **Always include a recommended answer.** Make the first option your
+  recommendation, label it `(Recommended)`, and put the *why* in its description —
+  give the user something to push against, not a blank prompt. The tool's automatic
+  **"Other"** option keeps it a real interview: it's there for the branch you
+  didn't foresee, so the user can always answer outside your options.
+- **Ask the human; don't go digging.** Direct every question at the user. Don't
+  open files, grep, or otherwise investigate the repo to pre-empt a question —
+  that codebase grounding is Act 2's job (codex reads the repo fresh). Where a fact
+  about the code matters to the plan, ask the user or record it as an explicit
+  assumption for codex to check; don't spend a round of the grill resolving it
+  yourself.
 - **Chase every branch.** Each decision opens new ones. Follow the decision tree
   until it's resolved: dependencies clarified, ambiguities settled, the risky
   corners poked. Stress-test rather than affirm — the goal is shared understanding
   you've both pressure-tested, not polite agreement.
+
+### Asking via AskUserQuestion
+
+`AskUserQuestion` is the native surface for this loop: one question, a recommended
+answer to push against, and an "Other" escape hatch for free-form replies. One
+question per call:
+
+```
+AskUserQuestion({
+  questions: [{
+    header: "Cache",
+    question: "Should the cache invalidate on write, or expire on a TTL?",
+    multiSelect: false,
+    options: [
+      { label: "Invalidate on write (Recommended)",
+        description: "Strong consistency — every write busts the key. Why: reads must never go stale, and write volume is low enough the extra cost is negligible." },
+      { label: "TTL expiry",
+        description: "Simpler, but serves stale data up to the TTL window." }
+    ]
+  }]
+})
+```
+
+The tool allows up to four questions per call — don't; one at a time is the
+mechanic. Where the answer space is genuinely open (e.g. an opening "what are you
+building?"), plain prose is fine — lean on the tool for the concrete tradeoff
+questions that make up most of the grill.
 
 **Stop when** the decision tree is resolved and you and the user share a concrete
 understanding of the plan — no major open branches, dependencies clear.
@@ -72,6 +114,10 @@ _Locked via grill — by Claude + <user>_
 
 ## Key decisions & tradeoffs
 <the contestable choices — exactly what you want codex to attack>
+
+## Assumptions to verify
+<facts about the codebase the grill took on the user's word, not by reading —
+list them explicitly so codex can check each against the real code in Act 2>
 
 ## Risks / open questions
 <genuinely open items>
