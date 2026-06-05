@@ -22,6 +22,7 @@ then `claude plugin install format-diary@cantrip`.)
 | [`format-diary`](plugins/format-diary) | Turns an Obsidian daily note of raw saved links into a formatted diary entry — speaking titles, resolved `share.google` URLs, summaries (YouTube transcript summaries included), hashtags, and collapsed callouts holding the full page text or transcript. |
 | [`council`](plugins/council) | Convenes a "council" for an independent second opinion before you act — sends a plan, decision, code review, or audit to codex (an external model, read-only) plus a separate independent Claude critique, reconciles both against the actual code, and reports a verdict (consensus, conflicts, dismissed false positives). Requires the [`codex`](https://github.com/openai/codex) CLI. |
 | [`land-pr`](plugins/land-pr) | Lands a GitHub PR end-to-end in an isolated worktree — verifies CI is green and review threads are resolved, runs the test suite, merges, updates the base branch, and cleans up. Aborts at any failing gate and never merges unless every check passes. Requires the [`gh`](https://cli.github.com) CLI. |
+| [`grill-me`](plugins/grill-me) | Interviews you into a locked plan — one question at a time, each with a recommended answer — then has [`codex`](https://github.com/openai/codex) (an external model, read-only, over MCP) adversarially review it round by round while Claude arbitrates revisions, until codex approves or you sign off. Writes `PLAN.md` and `PLAN-REVIEW-LOG.md`; no code until you sign off. Requires the [`codex`](https://github.com/openai/codex) CLI. |
 
 ## License
 

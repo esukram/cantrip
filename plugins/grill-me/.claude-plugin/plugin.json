@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "grill-me",
+  "displayName": "Grill Me",
+  "description": "Interview the user relentlessly to lock a plan, then have codex adversarially review it round by round until it approves or you sign off. One question at a time, each with a recommended answer, settles the decision tree into PLAN.md; codex (an external model, read-only, over MCP) then attacks the plan across rounds while Claude arbitrates revisions, appending the exchange to PLAN-REVIEW-LOG.md. No code is written until you sign off. Requires the codex CLI.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Markus Heimbach",
+    "email": "markus@heimbach.at"
+  },
+  "homepage": "https://github.com/esukram/cantrip/tree/main/plugins/grill-me",
+  "repository": "https://github.com/esukram/cantrip",
+  "license": "MIT",
+  "keywords": [
+    "grill",
+    "interview",
+    "plan",
+    "stress-test",
+    "codex",
+    "adversarial-review",
+    "mcp",
+    "second-opinion"
+  ]
+}

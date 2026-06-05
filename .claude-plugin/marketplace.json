@@ -27,6 +27,12 @@
       "source": "./plugins/land-pr",
       "description": "Land a GitHub PR end-to-end in an isolated worktree — verify CI is green and review threads are resolved, run the test suite, merge, update the base branch, and clean up. Aborts at any failing gate and never merges unless every check passes.",
       "version": "1.0.0"
+    },
+    {
+      "name": "grill-me",
+      "source": "./plugins/grill-me",
+      "description": "Interview the user relentlessly to lock a plan, then have codex adversarially review it round by round until it approves or you sign off. One question at a time, each with a recommended answer, settles the decision tree into PLAN.md; codex (an external model, read-only, over MCP) then attacks the plan across rounds while Claude arbitrates revisions, appending the exchange to PLAN-REVIEW-LOG.md. No code is written until you sign off. Requires the codex CLI.",
+      "version": "1.0.0"
     }
   ]
 }
