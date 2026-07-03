@@ -15,8 +15,9 @@ voices and reconciles them against the real code:
 
 It then triages every point against the actual code into **consensus / conflict /
 single-source / dismissed** (false positives refuted with a code reference) and reports
-a reconciled verdict — in `council:council`, disagreements that survive the loop are
-first expanded into an option map. It **recommends — it does not auto-apply changes**.
+a reconciled verdict — in `council:council`, surviving disagreements that hinge on
+human judgment are first expanded into an option map. It **recommends — it does not
+auto-apply changes**.
 
 ## Two modes
 
@@ -72,9 +73,10 @@ that already exists or a decision about to be made.
 | 2 | Pass 1 — convene both voices in parallel: codex (read-only) **and** an independent critic subagent. |
 | 3 | Triage every point against the actual code into a **draft verdict**; verify each kept claim at `file:line`. |
 | 4 | **Multi-pass loop** (`council:council`) — hand the draft back to the voices to attack; re-reconcile until it converges (≥2 passes, capped at `MAX_PASSES`). `council:fast` stops after the single pass. |
-| 5 | **Divergence expansion** (`council:council` only) — surviving human-bound conflicts get expanded into an option map: the hidden assumption driving the split plus 2–4 alternatives with tradeoffs (capped at `MAX_DEEP_DIVES`). |
-| 6 | **Arbitrate** (`council:council`, interactive only) — put any surviving judgment-owned conflict to the human, one question at a time, with the explored options on the ballot; the call is binding and recorded. |
-| 7 | Report a reconciled verdict (consensus / conflict / single-source / dismissed, plus Human-arbitrated / Human decision needed, with the full option maps), then stop. |
+| 5 | **Decide what needs the human** (`council:council` only) — classify surviving conflicts: code-settleable ones council rules on itself; judgment-owned ones head to the human. |
+| 6 | **Divergence expansion** (`council:council` only) — surviving human-bound conflicts get expanded into an option map: the hidden assumption driving the split plus 2–4 alternatives with tradeoffs (capped at `MAX_DEEP_DIVES`). |
+| 7 | **Arbitrate** (`council:council`, interactive only) — put any surviving judgment-owned conflict to the human, one question at a time, with the explored options on the ballot; the call is binding and recorded. |
+| 8 | Report a reconciled verdict (consensus / conflict / single-source / dismissed, plus Human-arbitrated / Human decision needed — with the full option maps in `council:council`), then stop. |
 
 See [`skills/council/references/codex-prompt-template.md`](skills/council/references/codex-prompt-template.md)
 for the briefing structure.

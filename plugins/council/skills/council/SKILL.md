@@ -1,6 +1,6 @@
 ---
 name: council
-description: Use this skill to get a thorough independent second opinion before acting on something — a plan, a technical or architectural decision, a code review or audit you've produced, or a choice between approaches. It convenes a "council": sends the artifact to codex (an external model, read-only) plus a separate independent Claude critique, then runs a multi-pass loop where the voices re-attack council's own draft verdict until it converges, reconciles everything against the actual code, expands the disagreements that survive into an explored option map, and reports what's worth acting on. When voices still disagree on something only the human can settle — intent, risk, scope, priority — it pulls the human in to arbitrate (interactive contexts only). Reach for it when the user is about to commit and wants to be sure ("is this plan sound?", "am I missing anything?", "before I merge", "the right call?"), wants findings verified ("cross-check these audit findings", "any false positives?"), is torn between options, or asks to "get a second opinion", "sanity-check this", or "have codex/the council look at it". Offer it proactively after a significant review, audit, or plan. For a quick single-pass read with no loop and no questions, use `council:fast` instead. For vetting existing work or a pending decision — not a first-pass code review, bug hunt, or research.
+description: Use this skill to get a thorough independent second opinion before acting on something — a plan, a technical or architectural decision, a code review or audit you've produced, or a choice between approaches. It convenes a "council": sends the artifact to codex (an external model, read-only) plus a separate independent Claude critique, then runs a multi-pass loop where the voices re-attack council's own draft verdict until it converges or a pass cap is hit, reconciles everything against the actual code, expands the surviving disagreements that hinge on human judgment into an explored option map, and reports what's worth acting on. When voices still disagree on something only the human can settle — intent, risk, scope, priority — it pulls the human in to arbitrate (interactive contexts only). Reach for it when the user is about to commit and wants to be sure ("is this plan sound?", "am I missing anything?", "before I merge", "the right call?"), wants findings verified ("cross-check these audit findings", "any false positives?"), is torn between options, or asks to "get a second opinion", "sanity-check this", or "have codex/the council look at it". Offer it proactively after a significant review, audit, or plan. For a quick single-pass read with no loop and no questions, use `council:fast` instead. For vetting existing work or a pending decision — not a first-pass code review, bug hunt, or research.
 ---
 
 # Council: a thorough independent second opinion
@@ -224,10 +224,14 @@ later calls:
 - **No voice can run pass 2** → stop and report the loop as **incomplete**. The
   ≥2 floor is best-effort, never a hang.
 
-Classification, divergence expansion, and human arbitration (Steps 5–7) fire
-**once, on the conflicts that survive the stopped loop** (converged or
-`MAX_PASSES`) — never on transient conflicts a later pass might dissolve.
-Expansion is additionally skipped when the loop ended incomplete.
+The post-loop stages — deciding which conflicts need the human (Step 5),
+divergence expansion (Step 6), and human arbitration (Step 7) — fire **once,
+on the conflicts that survive the stopped loop** (converged or `MAX_PASSES`) —
+never on transient conflicts a later pass might dissolve. If the loop ended
+**incomplete**, Step 5 still runs so the report can surface what's unresolved,
+but skip expansion and arbitration: route judgment-owned conflicts to "Human
+decision needed" marked *not loop-tested* rather than putting binding
+questions to the human on conflicts no pass re-attacked.
 
 ## Step 5 — Decide which surviving conflicts need the human
 
@@ -260,15 +264,15 @@ signal: the design space there is probably richer than either position. Before
 arbitration, expand the human-bound conflicts into an explored option map
 instead of flattening them to A-vs-B.
 
-**Selection.** From the surviving **human-bound** conflicts — the interactive
-arbitration queue first (the first `MAX_ARBITRATIONS`), then the remaining
-"Human decision needed" entries; on noninteractive runs, order by the severity
-of council's lean — pick up to `MAX_DEEP_DIVES`. Log which conflicts were
-expanded and which were skipped for the cap — no silent truncation.
-`MAX_DEEP_DIVES` (5) > `MAX_ARBITRATIONS` (3) is intentional: overflow maps
-enrich the "Human decision needed" entries, and the step runs equally on
-noninteractive runs — there, the report is the whole output. Conflicts council
-decides itself (code-settleable) are **not** expanded.
+**Selection.** Order the surviving **human-bound** conflicts by stakes — how
+much of the artifact hinges on the decision — and expand in that order, up to
+`MAX_DEEP_DIVES`; the same order drives the arbitration questions in Step 7.
+Log which conflicts were expanded and which were skipped for the cap — no
+silent truncation. The default `MAX_DEEP_DIVES` deliberately exceeds
+`MAX_ARBITRATIONS`: overflow maps enrich the "Human decision needed" entries,
+and the step runs equally on noninteractive runs — there, the report is the
+whole output. Conflicts council decides itself (code-settleable) are **not**
+expanded.
 
 **One position-neutral prompt, both voices.** Embed the full conflict context
 (both positions and the evidence each rests on) so neither voice needs session
@@ -283,8 +287,10 @@ Each option comes back structured — **label / what it trades away + when it's
 right / any claim needing verification** — so arbitration options can be built
 without synthesizing from loose prose.
 
-**Mechanics.** One call per voice. **Codex gets a fresh, non-session call by
-design** — not `codex-reply`. Resuming would hand one voice full memory of the
+**Mechanics.** One call per voice — they are independent, so launch both in
+the **same turn** (as in Step 2). **Codex gets a fresh, non-session call by
+design** — a new `mcp__codex__codex` call with the same read-only parameters
+as Step 2, not `codex-reply`. Resuming would hand one voice full memory of the
 position it defended for up to `MAX_PASSES` passes while the critic starts
 cold: structural anchoring at the exact step whose purpose is de-anchoring,
 and asymmetric inputs break the "identical inputs, real disagreements"
@@ -427,9 +433,10 @@ Then stop and let the user decide. This skill reconciles and recommends — it
 does **not** auto-apply changes. If the user then says "do it", implement the
 agreed actions as normal work.
 
-For further follow-up questions to codex outside the loop, continue the same
+For further follow-up questions to codex after the report, continue the same
 session with `mcp__codex__codex-reply` using the `threadId` rather than starting
-fresh, so codex keeps its context.
+fresh, so codex keeps its context. (The Step 6 expansion call is the deliberate
+exception — it stays fresh by design.)
 
 ## Scaling to the task
 

@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "council",
   "displayName": "Council",
-  "description": "Get an independent second opinion before acting on a plan, decision, code review, or audit. Sends the artifact to codex (an external model, read-only) plus a separate independent Claude critique, reconciles both against the actual code, and reports what's worth acting on. Two modes: `council:council` runs a thorough multi-pass loop (voices re-attack council's own draft until it converges), expands surviving disagreements into an explored option map, and interactively arbitrates judgment calls with the human; `council:fast` does a quick single autonomous pass.",
+  "description": "Get an independent second opinion before acting on a plan, decision, code review, or audit. Sends the artifact to codex (an external model, read-only) plus a separate independent Claude critique, reconciles both against the actual code, and reports what's worth acting on. Two modes: `council:council` runs a thorough multi-pass loop (voices re-attack council's own draft until it converges or a pass cap is hit), expands the surviving disagreements that hinge on human judgment into an explored option map, and interactively arbitrates those judgment calls with the human; `council:fast` does a quick single autonomous pass.",
   "version": "1.2.0",
   "author": {
     "name": "Markus Heimbach",
