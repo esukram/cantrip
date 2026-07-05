@@ -25,8 +25,8 @@
     {
       "name": "land-pr",
       "source": "./plugins/land-pr",
-      "description": "Land a GitHub PR end-to-end in an isolated worktree — verify CI is green and review threads are resolved, run the test suite, merge, update the base branch, and clean up. Aborts at any failing gate and never merges unless every check passes.",
-      "version": "1.0.0"
+      "description": "Land a GitHub PR end-to-end in an isolated worktree — verify CI is green, review threads are resolved, no changes are requested, and no open tasks remain (unchecked task-list items prompt for an explicit user overrule), run the test suite, merge, update the base branch, and clean up. Aborts at any failing hard gate and never merges unless every check passes.",
+      "version": "1.1.0"
     },
     {
       "name": "grill-me",
