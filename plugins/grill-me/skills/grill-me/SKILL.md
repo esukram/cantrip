@@ -1,6 +1,21 @@
 ---
 name: grill-me
-description: Interview the user relentlessly about something they're about to build, then have codex adversarially review the resulting plan. Act 1 — grill: ask the user one sharp question at a time (each with a recommended answer), chasing the decision tree until it's resolved and the plan is locked to PLAN.md. This is a pure human interview — Claude asks, the user answers; no codebase digging yet. Act 2 — review: codex (an external model, read-only, over MCP) reads the repo fresh and adversarially critiques the plan round by round, with Claude arbitrating revisions, until codex approves, a round cap is hit, or the user signs off. The codebase grounding lives here, in Act 2, where codex verifies the plan against the real code. Reach for it when the user is about to commit to something high-stakes and says "grill me", "stress-test this plan", "interview me about this then get a second model on it", "poke holes in this before I build it", or wants a plan hardened by questioning plus an outside model before any code is written. Plans and reviews only — it writes no implementation code until the user signs off.
+description: >-
+  Interview the user relentlessly about something they're about to build, then
+  have codex adversarially review the resulting plan. Act 1 — grill: ask the
+  user one sharp question at a time (each with a recommended answer), chasing
+  the decision tree until it's resolved and the plan is locked to PLAN.md. This
+  is a pure human interview — Claude asks, the user answers; no codebase
+  digging yet. Act 2 — review: codex (an external model, read-only, over MCP)
+  reads the repo fresh and adversarially critiques the plan round by round,
+  with Claude arbitrating revisions, until codex approves, a round cap is hit,
+  or the user signs off. The codebase grounding lives here, in Act 2, where
+  codex verifies the plan against the real code. Reach for it when the user is
+  about to commit to something high-stakes and says "grill me", "stress-test
+  this plan", "interview me about this then get a second model on it", "poke
+  holes in this before I build it", or wants a plan hardened by questioning
+  plus an outside model before any code is written. Plans and reviews only —
+  it writes no implementation code until the user signs off.
 argument-hint: "[what you're about to build]"
 ---
 
