@@ -3,7 +3,8 @@
 A Claude Code skill that takes a pull request from inspection all the way through
 merge and cleanup — running every stage in order and **aborting the moment a gate
 fails**, so a PR is never merged unless CI is green, review threads are resolved,
-and the test suite passes.
+no changes are requested, and the test suite passes. Unchecked task-list items on
+the PR are a softer gate: they prompt you and you may explicitly land anyway.
 
 ## What it does
 
@@ -11,8 +12,15 @@ Given a PR number, it runs these stages and stops at the first failure:
 
 1. **Inspect the PR** — state is `OPEN`, not a draft, `MERGEABLE`/`CLEAN`, and every
    status check rolled up to `SUCCESS`.
-2. **Verify review threads** — every review thread must be resolved; unresolved ones
-   are listed and the run aborts.
+2. **Preflight the PR state** — three checks before any local work:
+   - every review thread must be resolved (hard gate, paginated — unresolved ones
+     are listed and the run aborts);
+   - the review decision must not be `CHANGES_REQUESTED` (hard gate — the
+     requesting reviewers are listed and the run aborts);
+   - no unchecked task-list items (`- [ ]`) in the PR body, conversation comments,
+     or review bodies, ignoring bot-authored content (soft gate — findings are
+     listed and you choose between stopping or explicitly landing anyway; in
+     non-interactive runs this fails closed and aborts).
 3. **Create an isolated worktree** — a sibling checkout of the PR branch so your main
    working copy is never touched.
 4. **Install dependencies and run tests** — auto-detects the package manager
